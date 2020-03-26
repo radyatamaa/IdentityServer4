@@ -126,6 +126,16 @@ namespace IdentityServer4.ResponseHandling
                     entries.Add(OidcConstants.Discovery.UserInfoEndpoint, baseUrl + Constants.ProtocolRoutePaths.UserInfo);
                 }
 
+                //if (Options.Endpoints.EnableRegisterEndpoint)
+                //{
+                //    entries.Add(OidcConstants.Discovery.RegistrationEndpoint, baseUrl + Constants.ProtocolRoutePaths.Register);
+                //}
+
+                //if (Options.Endpoints.EnableUpdateUserEndpoint)
+                //{
+                //    entries.Add(OidcConstants.Discovery.RegistrationEndpoint, baseUrl + Constants.ProtocolRoutePaths.UpdateUser);
+                //}
+
                 if (Options.Endpoints.EnableEndSessionEndpoint)
                 {
                     entries.Add(OidcConstants.Discovery.EndSessionEndpoint, baseUrl + Constants.ProtocolRoutePaths.EndSession);

@@ -90,6 +90,8 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.AddEndpoint<TokenRevocationEndpoint>(EndpointNames.Revocation, ProtocolRoutePaths.Revocation.EnsureLeadingSlash());
             builder.AddEndpoint<TokenEndpoint>(EndpointNames.Token, ProtocolRoutePaths.Token.EnsureLeadingSlash());
             builder.AddEndpoint<UserInfoEndpoint>(EndpointNames.UserInfo, ProtocolRoutePaths.UserInfo.EnsureLeadingSlash());
+            builder.AddEndpoint<RegisterEndpoint>(EndpointNames.Register, ProtocolRoutePaths.Register.EnsureLeadingSlash());
+            builder.AddEndpoint<UpdateUserEndpoint>(EndpointNames.UpdateUser, ProtocolRoutePaths.UpdateUser.EnsureLeadingSlash());
 
             return builder;
         }

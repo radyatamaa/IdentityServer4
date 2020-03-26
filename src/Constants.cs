@@ -205,6 +205,8 @@ namespace IdentityServer4
             public const string EndSession = "Endsession";
             public const string CheckSession = "Checksession";
             public const string UserInfo = "Userinfo";
+            public const string Register = "Register";
+            public const string UpdateUser = "UpdateUser";
         }
 
         public static class ProtocolRoutePaths
@@ -221,6 +223,8 @@ namespace IdentityServer4
             public const string EndSessionCallback     = EndSession + "/callback";
             public const string CheckSession           = "connect/checksession";
             public const string DeviceAuthorization    = "connect/deviceauthorization";
+            public const string Register               = "connect/register";
+            public const string UpdateUser             = "connect/update-user";
 
             public static readonly string[] CorsPaths =
             {
@@ -228,6 +232,7 @@ namespace IdentityServer4
                 DiscoveryWebKeys,
                 Token,
                 UserInfo,
+                Register,
                 Revocation
             };
         }

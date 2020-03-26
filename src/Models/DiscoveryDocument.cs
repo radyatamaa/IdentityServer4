@@ -1,4 +1,4 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 #pragma warning disable 1591
@@ -12,6 +12,8 @@ namespace IdentityServer4.Models
         public string authorization_endpoint { get; set; }
         public string token_endpoint { get; set; }
         public string userinfo_endpoint { get; set; }
+        public string register_endpoint { get; set; }
+        public string update_user_endpoint { get; set; }
         public string end_session_endpoint { get; set; }
         public string check_session_iframe { get; set; }
         public string revocation_endpoint { get; set; }

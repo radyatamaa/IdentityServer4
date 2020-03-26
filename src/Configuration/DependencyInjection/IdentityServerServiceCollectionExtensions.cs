@@ -1,4 +1,4 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
@@ -8,6 +8,10 @@ using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.EntityFrameworkCore;
+using IdentityServer4.Data;
+using IdentityServer4.Serivces;
+using IdentityServer4.Test;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -34,6 +38,13 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IIdentityServerBuilder AddIdentityServer(this IServiceCollection services)
         {
             var builder = services.AddIdentityServerBuilder();
+           
+            services.AddDbContext<UMDbContext>
+               (options => options.UseMySql("server=cgo-mysqldbserver.mysql.database.azure.com;port=3306;database=cgo_um;uid=cgo-admin@cgo-mysqldbserver;password='Standar123.'"));
+
+            services.AddScoped<IDbContext>(c => c.GetService<UMDbContext>());
+            services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IUMStore, UMStore>();
 
             builder
                 .AddRequiredPlatformServices()
@@ -47,6 +58,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddDefaultSecretValidators();
 
             // provide default in-memory implementation, not suitable for most production scenarios
+
             builder.AddInMemoryPersistedGrants();
 
             return builder;

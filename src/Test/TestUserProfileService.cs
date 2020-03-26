@@ -1,9 +1,10 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
+using IdentityServer4.Serivces;
 using IdentityServer4.Services;
 using Microsoft.Extensions.Logging;
 using System.Linq;
@@ -21,7 +22,8 @@ namespace IdentityServer4.Test
         /// The logger
         /// </summary>
         protected readonly ILogger Logger;
-        
+        private readonly IUsersService _usersService;
+
         /// <summary>
         /// The users
         /// </summary>
@@ -32,8 +34,9 @@ namespace IdentityServer4.Test
         /// </summary>
         /// <param name="users">The users.</param>
         /// <param name="logger">The logger.</param>
-        public TestUserProfileService(TestUserStore users, ILogger<TestUserProfileService> logger)
+        public TestUserProfileService(TestUserStore users, ILogger<TestUserProfileService> logger,IUsersService usersService)
         {
+            _usersService = usersService;
             Users = users;
             Logger = logger;
         }
@@ -43,13 +46,13 @@ namespace IdentityServer4.Test
         /// </summary>
         /// <param name="context">The context.</param>
         /// <returns></returns>
-        public virtual Task GetProfileDataAsync(ProfileDataRequestContext context)
+        public virtual async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
             context.LogProfileRequest(Logger);
 
             if (context.RequestedClaimTypes.Any())
             {
-                var user = Users.FindBySubjectId(context.Subject.GetSubjectId());
+                var user = await _usersService.FindBySubjectId(context.Subject.GetSubjectId());
                 if (user != null)
                 {
                     context.AddRequestedClaims(user.Claims);
@@ -58,7 +61,7 @@ namespace IdentityServer4.Test
 
             context.LogIssuedClaims(Logger);
 
-            return Task.CompletedTask;
+            //return Task.CompletedTask;
         }
 
         /// <summary>
@@ -67,14 +70,14 @@ namespace IdentityServer4.Test
         /// </summary>
         /// <param name="context">The context.</param>
         /// <returns></returns>
-        public virtual Task IsActiveAsync(IsActiveContext context)
+        public virtual async Task IsActiveAsync(IsActiveContext context)
         {
             Logger.LogDebug("IsActive called from: {caller}", context.Caller);
 
-            var user = Users.FindBySubjectId(context.Subject.GetSubjectId());
+            var user = await _usersService.FindBySubjectId(context.Subject.GetSubjectId());
             context.IsActive = user?.IsActive == true;
 
-            return Task.CompletedTask;
+            //return Task.CompletedTask;
         }
     }
 }

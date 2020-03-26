@@ -33,6 +33,9 @@ namespace IdentityServer4.Configuration
         /// </value>
         public bool EnableUserInfoEndpoint { get; set; } = true;
 
+        public bool EnableRegisterEndpoint { get; set; } = true;
+
+        public bool EnableUpdateUserEndpoint { get; set; } = true;
         /// <summary>
         /// Gets or sets a value indicating whether the discovery document endpoint is enabled.
         /// </summary>

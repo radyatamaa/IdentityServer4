@@ -11,6 +11,9 @@ using IdentityServer4.Endpoints.Results;
 using IdentityModel;
 using Microsoft.AspNetCore.Http;
 using System.Net;
+using Newtonsoft.Json;
+using System;
+using IdentityServer4.Serivces;
 
 namespace IdentityServer4.Endpoints
 {
@@ -20,6 +23,7 @@ namespace IdentityServer4.Endpoints
     /// <seealso cref="IdentityServer4.Hosting.IEndpointHandler" />
     internal class UserInfoEndpoint : IEndpointHandler
     {
+        private readonly IUsersService _usersService;
         private readonly BearerTokenUsageValidator _tokenUsageValidator;
         private readonly IUserInfoRequestValidator _requestValidator;
         private readonly IUserInfoResponseGenerator _responseGenerator;
@@ -36,8 +40,10 @@ namespace IdentityServer4.Endpoints
             BearerTokenUsageValidator tokenUsageValidator, 
             IUserInfoRequestValidator requestValidator, 
             IUserInfoResponseGenerator responseGenerator, 
-            ILogger<UserInfoEndpoint> logger)
+            ILogger<UserInfoEndpoint> logger,
+            IUsersService usersService)
         {
+            _usersService = usersService;
             _tokenUsageValidator = tokenUsageValidator;
             _requestValidator = requestValidator;
             _responseGenerator = responseGenerator;
@@ -87,9 +93,15 @@ namespace IdentityServer4.Endpoints
             // generate response
             _logger.LogTrace("Calling into userinfo response generator: {type}", _responseGenerator.GetType().FullName);
             var response = await _responseGenerator.ProcessAsync(validationResult);
+            var id = response.Values;
+            var serelizeArrayId = JsonConvert.SerializeObject(id);
+            serelizeArrayId = serelizeArrayId.Replace("[", "");
+            serelizeArrayId = serelizeArrayId.Replace("]", "");
+            serelizeArrayId = serelizeArrayId.Replace("\"", "");
 
+           var respon = await _usersService.GetByIdUserTest(serelizeArrayId);
             _logger.LogDebug("End userinfo request");
-            return new UserInfoResult(response);
+            return new UserInfoResult(respon);
         }
 
         private IEndpointResult Error(string error, string description = null)
